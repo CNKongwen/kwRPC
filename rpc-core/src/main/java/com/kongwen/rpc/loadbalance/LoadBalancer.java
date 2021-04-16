@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface LoadBalancer {
 
-    Instance select(List<Instance> instances);
+    Instance select(List<Instance> instances, String address);
 
 }

@@ -10,7 +10,9 @@ import com.kongwen.rpc.util.NacosUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -37,9 +39,9 @@ public class NacosServiceDiscovery implements ServiceDiscovery{
                 throw new RpcException(RpcError.SERVICE_NOT_FOUND);
             }
             //使用负载均衡器选择一个服务端并返回其地址
-            Instance instance = loadBalancer.select(instances);
+            Instance instance = loadBalancer.select(instances, InetAddress.getLocalHost().getHostAddress());
             return new InetSocketAddress(instance.getIp(), instance.getPort());
-        } catch (NacosException e) {
+        } catch (NacosException | UnknownHostException e) {
             logger.error("获取服务时有错误发生:", e);
         }
         return null;
